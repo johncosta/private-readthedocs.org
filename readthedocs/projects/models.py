@@ -41,8 +41,12 @@ class Project(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
 
+    private = models.BooleanField(default=False, 
+        help_text="Restrict access to this project")
     #Generally from conf.py
     users = models.ManyToManyField(User, related_name='projects')
+    #People who can view the docs. Only useful for auth.
+    members = models.ManyToManyField(User, related_name='member_projects')
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True)
     description = models.TextField(blank=True,
@@ -196,7 +200,10 @@ class Project(models.Model):
 
     @property
     def doc_path(self):
-        return os.path.join(settings.DOCROOT, self.slug)
+        if self.private:
+            return os.path.join(settings.PRIVATEROOT, self.slug)
+        else:
+            return os.path.join(settings.DOCROOT, self.slug)
 
     def checkout_path(self, version='latest'):
         return os.path.join(self.doc_path, 'checkouts', version)

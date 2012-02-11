@@ -253,3 +253,38 @@ def server_error_404(request, template_name='404.html'):
     )
     r.status_code = 404
     return r
+
+def serve_docsv2(request, lang_slug, version_slug, filename, project_slug=None):
+    "serve_docs but with auth, and no redirecting logic."
+    #Get the project slug from the request if it isn't given.
+    if not project_slug:
+        project_slug = request.slug
+    proj = get_object_or_404(Project, slug=project_slug)
+    if proj.private and request.user not in proj.members.all() and request.user not in proj.users.all():
+        raise Http404("You must be a member of this project")
+    #Set the correct filename.
+    if not filename:
+        filename = "index.html"
+    else:
+        filename = filename.rstrip('/')
+    basepath = proj.rtd_build_path(version_slug)
+    if not settings.DEBUG:
+        log.info('Serving %s for %s with sendfile' % (filename, proj))
+        fullpath = os.path.join(basepath, filename)
+        mimetype, encoding = mimetypes.guess_type(fullpath)
+        mimetype = mimetype or 'application/octet-stream'
+        response = HttpResponse(mimetype=mimetype)
+        if encoding:
+            response["Content-Encoding"] = encoding
+        try:
+            response['X-Accel-Redirect'] = os.path.join('/private_builds',
+                                             proj.slug,
+                                             'rtd-builds',
+                                             version_slug,
+                                             filename)
+        except UnicodeEncodeError:
+            raise Http404
+        return response
+    else:
+        log.info('Serving %s for %s with Django' % (filename, proj))
+        return serve(request, filename, basepath)

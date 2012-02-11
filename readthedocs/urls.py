@@ -31,6 +31,10 @@ urlpatterns = patterns('',
         'core.views.serve_docs',
         name='docs_detail'
     ),
+    url(r'^docsv2/(?P<project_slug>[-\w]+)/(?P<lang_slug>en)/(?P<version_slug>[-._\w]+?)/(?P<filename>.*)$',
+        'core.views.serve_docsv2',
+        name='docs_detailv2'
+    ),
     #This is for redirecting to the latest.
     url(r'^docs/(?P<project_slug>[-\w]+)/(?P<version_slug>[-._\w]+?)/(?P<filename>.*)$',
         'core.views.serve_docs',
