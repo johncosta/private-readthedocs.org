@@ -49,7 +49,7 @@ class Project(models.Model):
     slug = models.SlugField(max_length=255, unique=True)
     description = models.TextField(blank=True,
         help_text='The reStructuredText description of the project')
-    repo = models.CharField(max_length=100, blank=True,
+    repo = models.CharField(max_length=150, blank=True,
             help_text='Checkout URL for your code (hg, git, etc.). Ex. https://github.com/ericholscher/django-kong.git')
     repo_type = models.CharField(max_length=10, choices=constants.REPO_CHOICES, default='git')
     project_url = models.URLField(blank=True, help_text='The project\'s homepage', verify_exists=False)
