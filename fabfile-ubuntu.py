@@ -17,8 +17,9 @@ RTD_CLONE='git://github.com/johncosta/readthedocs.org.git'
 RTD_CLONE_NAME="readthedocs.org"
 RTD_INITIAL_VERSION='v0.1'
 
-CREATE_USER_SQL = """CREATE USER '%(db_user)s'@'localhost' IDENTIFIED BY '%(db_password)s';"""
-CREATE_DB_SQL = """CREATE DATABASE %(db_name)s DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;"""
+CREATE_DB_SQL = """CREATE DATABASE IF NOT EXISTS %(db_name)s DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;"""
+CREATE_USER_SQL = """CREATE USER '%(db_user)s' IDENTIFIED BY '%(db_password)s';"""
+DELETE_USER_SQL = """DROP USER %(db_user)s;"""
 GRANT_PERMISSIONS_SQL = """
     GRANT ALL ON %(db_name)s.* TO '%(db_user)s'@'localhost';
     FLUSH PRIVILEGES;
@@ -51,9 +52,11 @@ def package_setup(use_db_backend=True):
     env.password=ROOT_PASS
 
     # for ppa use
+    package_update_apt()
+    package_update()
     package_ensure('python-software-properties')
+    repository_ensure_apt("-y ppa:nginx/stable") # no prompt
 
-    repository_ensure_apt("ppa:nginx/stable")
     package_update_apt()
     package_update()
 
@@ -93,11 +96,14 @@ def configure_database(use_db_backend=True):
     env.user=RTD_USER
     env.password=RTD_PASS
 
-    # TODO not very IDEMPOTENT
     if use_db_backend:
-        run("mysqladmin -u root -p'changeme123' create readthedocs")
+        run("mysql -u root -p'changeme123' -e \"%s\"" % (CREATE_DB_SQL % {'db_name': 'readthedocs'} ))
+        try:
+            run("mysql -u root -p'changeme123' readthedocs -e \"%s\"" % (DELETE_USER_SQL % { 'db_user': 'readthedocs_user'}))
+        except:
+            pass # may fail the first time through
         run("mysql -u root -p'changeme123' readthedocs -e \"%s\"" % (CREATE_USER_SQL % { 'db_user': 'readthedocs_user', 'db_password': 'readthedocs_pass_123'}))
-        run("mysql -u root -p'changeme123' readthedocs -e \"%s\"" % (GRANT_PERMISSIONS_SQL % { 'db_user': 'readthedocs_user', 'db_name': 'readthedocs'}))
+        run("mysql -u root -p'changeme123' -e \"%s\"" % (GRANT_PERMISSIONS_SQL % { 'db_user': 'readthedocs_user', 'db_name': 'readthedocs'}))
 
 
 @hosts(HOSTS)
