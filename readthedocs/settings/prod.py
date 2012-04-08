@@ -5,7 +5,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 TASTYPIE_FULL_DEBUG = True
 
-DOMAIN = ''
+DOMAIN = '108.171.175.201'
 
 DATABASES = {
     'default': {

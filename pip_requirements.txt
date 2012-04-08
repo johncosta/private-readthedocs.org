@@ -15,7 +15,7 @@ github2
 httplib2
 distutils2
 Unipath
-django
+
 unittest-xml-reporting
 redis
 south
@@ -27,3 +27,9 @@ git+https://github.com/nathanborror/django-registration.git#egg=django-registrat
 git+https://github.com/toastdriven/django-tastypie.git#egg=tastypie
 git+https://github.com/toastdriven/django-haystack#egg=django-haystack
 git+https://github.com/deceze/Sphinx-HTTP-domain.git#egg=sphinx-http-domain
+
+django==1.3.1
+gunicorn==0.13.4
+eventlet
+MySQL-Python
+whoosh
