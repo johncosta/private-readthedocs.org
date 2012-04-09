@@ -1,5 +1,6 @@
 import logging
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 
 from django.core.management.base import BaseCommand
 from projects import tasks
@@ -17,11 +18,8 @@ Creates a readthedocs demo api user for one button deploy
     def handle(self, *args, **kwargs):
         """ Creates demo api user """
         try:
-            user = User.objects.create(username="test", email="test@example.com")
+            user = User.objects.get(username="test")
+        except ObjectDoesNotExist:
+            user = User.objects.get_or_create(username="test", email="test@example.com")
             user.set_password("test")
             user.save()
-        except Exception, e:
-            log.error(e)
-            log.error("Unable to configure test user.. you may need to do this manually")
-
-
