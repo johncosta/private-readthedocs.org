@@ -142,8 +142,8 @@ def bootstrap_virtualenv():
     env.password=RTD_PASS
 
     run("source /opt/rtd/apps/readthedocs/current/bin/activate && pip install -r /opt/rtd/apps/readthedocs/current/readthedocs.org/pip_requirements.txt")
-    run("source /opt/rtd/apps/readthedocs/current/bin/activate && /opt/rtd/apps/readthedocs/current/readthedocs.org/readthedocs/manage.py syncdb")
-    run("source /opt/rtd/apps/readthedocs/current/bin/activate && /opt/rtd/apps/readthedocs/current/readthedocs.org/readthedocs/manage.py migrate")
+    run("source /opt/rtd/apps/readthedocs/current/bin/activate && /opt/rtd/apps/readthedocs/current/readthedocs.org/readthedocs/manage.py syncdb --noinput")
+    run("source /opt/rtd/apps/readthedocs/current/bin/activate && /opt/rtd/apps/readthedocs/current/readthedocs.org/readthedocs/manage.py migrate --noinput")
 
 @hosts(HOSTS)
 def link_django_settings():
