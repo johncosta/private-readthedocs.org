@@ -10,12 +10,13 @@ class Migration(SchemaMigration):
         
         # Changing field 'VersionAlias.slug'
         #db.alter_column('builds_versionalias', 'slug', self.gf('django.db.models.fields.TextField')(max_length=255))
+        pass
 
     def backwards(self, orm):
         
         # Changing field 'VersionAlias.slug'
         #db.alter_column('builds_versionalias', 'slug', self.gf('django.db.models.fields.SlugField')(max_length=50))
-
+        pass
 
     models = {
         'auth.group': {

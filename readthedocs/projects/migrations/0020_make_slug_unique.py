@@ -10,13 +10,13 @@ class Migration(SchemaMigration):
         
         # Adding unique constraint on 'Project', fields ['slug']
         #db.create_unique('projects_project', ['slug'])
-
+        pass
 
     def backwards(self, orm):
         
         # Removing unique constraint on 'Project', fields ['slug']
         #db.delete_unique('projects_project', ['slug'])
-
+        pass
 
     models = {
         'auth.group': {
