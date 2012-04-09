@@ -18,8 +18,8 @@ RTD_CLONE_NAME="readthedocs.org"
 RTD_INITIAL_VERSION='v0.1'
 
 CREATE_DB_SQL = """CREATE DATABASE IF NOT EXISTS %(db_name)s DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;"""
-CREATE_USER_SQL = """CREATE USER '%(db_user)s' IDENTIFIED BY '%(db_password)s';"""
-DELETE_USER_SQL = """DROP USER %(db_user)s;"""
+CREATE_USER_SQL = """CREATE USER %(db_user)s@localhost IDENTIFIED BY '%(db_password)s';"""
+DELETE_USER_SQL = """DROP USER %(db_user)s@localhost;"""
 GRANT_PERMISSIONS_SQL = """
     GRANT ALL ON %(db_name)s.* TO '%(db_user)s'@'localhost';
     FLUSH PRIVILEGES;
@@ -65,7 +65,6 @@ def package_setup(use_db_backend=True):
     package_ensure("nginx")
     package_ensure("git-core gitosis")
     package_ensure("python-pip python-dev build-essential")
-    package_ensure("libmysqlclient-dev python-dev") # for mysql
     run("aptitude install memcached -y")
 
     # TODO: This isn't very idempotent
@@ -85,6 +84,7 @@ def package_setup(use_db_backend=True):
 
         warn('\n=========\nThe password for mysql "root" user will be set to "%s"\n=========\n' % passwd)
         run('aptitude install -y mysql-server')
+    package_ensure("libmysqlclient-dev") # for mysql
 
     run("easy_install pip")
     run("pip install virtualenv")
