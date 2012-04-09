@@ -1,11 +1,12 @@
 from cuisine import (user_ensure, dir_ensure, user_passwd, package_ensure,
     run, package_update_apt, package_update, dir_exists, file_link, file_exists, repository_ensure_apt)
 from fabric.context_managers import cd
+from fabric.contrib.files import sed
 from fabric.decorators import hosts
 from fabric.state import env
 from fabric.utils import warn
 
-HOSTS=['108.171.175.201']
+HOSTS=['108.171.175.201']  # script doesn't support multiple hosts
 
 ROOT_USER='root'
 ROOT_PASS='john-testU2nq0FLn5'
@@ -34,6 +35,7 @@ def stage_rtd():
     make_virtualenv()
     bootstrap_virtualenv()
     link_django_settings()
+    host_replace()
     link_nginx()
     link_supervisor()
     system_prep()
@@ -154,6 +156,13 @@ def link_django_settings():
     with cd("/opt/rtd/apps/readthedocs/current/readthedocs.org/readthedocs/settings"):
         if not file_exists("currentenv.py"):
             file_link("prod.py","currentenv.py")
+
+@hosts(HOSTS)
+def host_replace():
+    """ replace the host params variables
+    """
+    sed("/opt/rtd/apps/readthedocs/current/readthedocs.org/conf/nginx.conf", '<% HOST_IP %>', HOSTS[0])
+    sed("/opt/rtd/apps/readthedocs/current/readthedocs.org/readthedocs/settings/prod.py", '<% HOST_IP %>', HOSTS[0])
 
 @hosts(HOSTS)
 def link_nginx():
