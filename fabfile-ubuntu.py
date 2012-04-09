@@ -6,10 +6,10 @@ from fabric.decorators import hosts
 from fabric.state import env
 from fabric.utils import warn
 
-HOSTS=['108.171.175.201']  # script doesn't support multiple hosts
+HOSTS=['Enter Ip Here']  # script doesn't support multiple hosts
 
 ROOT_USER='root'
-ROOT_PASS='john-testU2nq0FLn5'
+ROOT_PASS='root password'
 
 RTD_USER='rtd_user'
 RTD_PASS='rtd_pass_123'
