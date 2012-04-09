@@ -20,6 +20,6 @@ Creates a readthedocs demo api user for one button deploy
         try:
             user = User.objects.get(username="test")
         except ObjectDoesNotExist:
-            user = User.objects.get_or_create(username="test", email="test@example.com")
+            user = User.objects.create(username="test", email="test@example.com")
             user.set_password("test")
             user.save()
