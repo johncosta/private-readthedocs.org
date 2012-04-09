@@ -34,6 +34,9 @@ def stage_rtd():
     make_virtualenv()
     bootstrap_virtualenv()
     link_django_settings()
+    link_nginx()
+    link_supervisor()
+    system_prep()
 
 
 @hosts(HOSTS)
@@ -142,8 +145,8 @@ def bootstrap_virtualenv():
     env.password=RTD_PASS
 
     run("source /opt/rtd/apps/readthedocs/current/bin/activate && pip install -r /opt/rtd/apps/readthedocs/current/readthedocs.org/pip_requirements.txt")
-    run("source /opt/rtd/apps/readthedocs/current/bin/activate && /opt/rtd/apps/readthedocs/current/readthedocs.org/readthedocs/manage.py syncdb --noinput")
-    run("source /opt/rtd/apps/readthedocs/current/bin/activate && /opt/rtd/apps/readthedocs/current/readthedocs.org/readthedocs/manage.py migrate --noinput")
+    run("source /opt/rtd/apps/readthedocs/current/bin/activate && /opt/rtd/apps/readthedocs/current/readthedocs.org/readthedocs/manage.py syncdb --noinput --settings=settings.prod")
+    run("source /opt/rtd/apps/readthedocs/current/bin/activate && /opt/rtd/apps/readthedocs/current/readthedocs.org/readthedocs/manage.py migrate --noinput --settings=settings.prod")
 
 @hosts(HOSTS)
 def link_django_settings():
