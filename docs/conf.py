@@ -2,9 +2,9 @@
 #
 import sys, os
 sys.path.insert(0, os.path.abspath('../readthedocs'))
-import settings.sqlite
+#import settings.sqlite
 from django.core.management import setup_environ
-setup_environ(settings.sqlite)
+#setup_environ(settings.sqlite)
 
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 'sphinx_http_domain']
 templates_path = ['_templates']
