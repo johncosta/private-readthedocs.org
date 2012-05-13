@@ -17,7 +17,7 @@ from projects.libs.diff_match_patch import diff_match_patch
 log = logging.getLogger(__name__)
 
 
-SITE_DOMAIN = getattr(settins, 'SITE_DOMAIN', 'readthedocs.org')
+SITE_DOMAIN = getattr(settings, 'SITE_DOMAIN', 'readthedocs.org')
 
 def find_file(file):
     """Find matching filenames in the current directory and its subdirectories,
