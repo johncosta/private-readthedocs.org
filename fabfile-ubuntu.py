@@ -6,10 +6,10 @@ from fabric.decorators import hosts
 from fabric.state import env
 from fabric.utils import warn
 
-HOSTS=['108.171.160.26']  # script doesn't support multiple hosts
+HOSTS=['50.57.69.212']  # script doesn't support multiple hosts
 
 ROOT_USER='root'
-ROOT_PASS='john-testJfi35BBi4'
+ROOT_PASS='1dj6PBG5breadthedocs-test'
 
 RTD_USER='rtd_user'
 RTD_PASS='rtd_pass_123'
@@ -149,6 +149,7 @@ def bootstrap_virtualenv():
     run("source /opt/rtd/apps/readthedocs/current/bin/activate && pip install -r /opt/rtd/apps/readthedocs/current/readthedocs.org/pip_requirements.txt")
     run("source /opt/rtd/apps/readthedocs/current/bin/activate && /opt/rtd/apps/readthedocs/current/readthedocs.org/readthedocs/manage.py syncdb --noinput --settings=settings.prod")
     run("source /opt/rtd/apps/readthedocs/current/bin/activate && /opt/rtd/apps/readthedocs/current/readthedocs.org/readthedocs/manage.py migrate --noinput --settings=settings.prod")
+    run("source /opt/rtd/apps/readthedocs/current/bin/activate && /opt/rtd/apps/readthedocs/current/readthedocs.org/readthedocs/manage.py collectstatic --noinput --settings=settings.prod")
     run("source /opt/rtd/apps/readthedocs/current/bin/activate && /opt/rtd/apps/readthedocs/current/readthedocs.org/readthedocs/manage.py create_api_user --settings=settings.prod")
 
 @hosts(HOSTS)
