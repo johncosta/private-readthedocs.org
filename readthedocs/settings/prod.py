@@ -58,7 +58,7 @@ HAYSTACK_CONNECTIONS = {
 }
 SLUMBER_USERNAME = 'test'
 SLUMBER_PASSWORD = 'test'
-SLUMBER_API_HOST = 'http://%s/' % DOMAIN #'http://<domain>/'
+SLUMBER_API_HOST = 'http://%s' % DOMAIN #'http://<domain>/'
 
 
 SESSION_COOKIE_DOMAIN = None
