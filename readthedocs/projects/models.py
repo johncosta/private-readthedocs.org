@@ -22,6 +22,8 @@ from vcs_support.backends import backend_cls
 from vcs_support.utils import Lock
 
 
+SITE_DOMAIN = getattr(settings, 'SITE_DOMAIN', 'readthedocs.org')
+
 class ProjectManager(models.Manager):
     def live(self, *args, **kwargs):
         base_qs = self.filter(skip=False)
@@ -96,7 +98,7 @@ class Project(models.Model):
 
     @property
     def subdomain(self):
-        return "%s.readthedocs.org" % self.slug#.replace('_', '-')
+        return "%s.%s" % (SITE_DOMAIN, self.slug) #.replace('_', '-')
 
     def save(self, *args, **kwargs):
         #if hasattr(self, 'pk'):

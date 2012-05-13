@@ -16,6 +16,9 @@ from projects.libs.diff_match_patch import diff_match_patch
 
 log = logging.getLogger(__name__)
 
+
+SITE_DOMAIN = getattr(settins, 'SITE_DOMAIN', 'readthedocs.org')
+
 def find_file(file):
     """Find matching filenames in the current directory and its subdirectories,
     and return a list of matching filenames.
@@ -134,21 +137,21 @@ def purge_version(version, mainsite=False, subdomain=False, cname=False):
         for server in varnish_servers:
             if subdomain:
                 #Send a request to the Server, to purge the URL of the Host.
-                host = "%s.readthedocs.org" % version.project.slug
+                host = "%s.%s" % (SITE_DOMAIN, version.project.slug)
                 headers = {'Host': host}
                 url = "/en/%s/*" % version.slug
                 to_purge = "http://%s%s" % (server, url)
                 log.info("Purging %s on %s" % (url, host))
                 ret = h.request(to_purge, method="PURGE", headers=headers)
             if mainsite:
-                headers = {'Host': "readthedocs.org"}
+                headers = {'Host': "%s" % SITE_DOMAIN}
                 url = "/docs/%s/en/%s/*" % (version.project.slug, version.slug)
                 to_purge = "http://%s%s" % (server, url)
-                log.info("Purging %s on readthedocs.org" % url)
+                log.info("Purging %s on %s" % (SITE_DOMAIN, url))
                 ret = h.request(to_purge, method="PURGE", headers=headers)
                 root_url = "/docs/%s/" % version.project.slug
                 to_purge = "http://%s%s" % (server, root_url)
-                log.info("Purging %s on readthedocs.org" % root_url)
+                log.info("Purging %s on %s" % (SITE_DOMAIN, root_url))
                 ret2 = h.request(to_purge, method="PURGE", headers=headers)
             if cname:
                 redis_conn = redis.Redis(**settings.REDIS)

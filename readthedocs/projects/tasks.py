@@ -39,6 +39,8 @@ ghetto_hack = re.compile(
 
 log = logging.getLogger(__name__)
 
+SITE_DOMAIN = getattr(settings, 'SITE_DOMAIN', 'readthedocs.org')
+
 @task
 def remove_dir(path):
     """
@@ -490,8 +492,8 @@ def update_intersphinx(version_pk):
                 find_str = "rtd-builds/latest"
                 latest = url.find(find_str)
                 url = url[latest + len(find_str) + 1:]
-                url = "http://%s.readthedocs.org/en/latest/%s" % (
-                    version.project.slug, url)
+                url = "http://%s.%s/en/latest/%s" % (
+                    SITE_DOMAIN, version.project.slug, url)
                 save_term(version, term, url, title)
                 if '.' in term:
                     save_term(version, term.split('.')[-1], url, title)

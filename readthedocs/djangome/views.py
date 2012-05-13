@@ -11,6 +11,8 @@ from django.shortcuts import redirect
 
 r = redis.Redis(**settings.REDIS)
 
+SITE_DOMAIN = getattr(settings, 'SITE_DOMAIN', 'readthedocs.org')
+
 class RedirectForm(forms.Form):
     _domain = 'readthedocs.org'
 
@@ -24,7 +26,7 @@ class RedirectForm(forms.Form):
         return self.cleaned_data['url']
 
 def redirect_home(request, version):
-    return http.HttpResponseRedirect('http://%s.readthedocs.org' % request.slug)
+    return http.HttpResponseRedirect('http://%s.%s' % (SITE_DOMAIN, request.slug))
 
 def redirect_to_term(request, version, term):
     form = RedirectForm(request.GET or None)
